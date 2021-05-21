@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="20dp"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+
+
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_gravity="center"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_warning"
+        app:tint="#E45151" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Do You Wants To Remove This Item ?"
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="#616161"
+        android:layout_marginTop="20dp"
+        android:textSize="24dp"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        >
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNo"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:backgroundTint="#9E9E9E"
+            android:background="@drawable/back_white"
+            android:textColor="@color/white"
+
+            />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnRemove"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Remove"
+            android:textColor="@color/white"
+            android:backgroundTint="#E45151"
+            android:background="@drawable/back_white"
+            android:layout_marginStart="20dp"
+
+            />
+
+
+
+    </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
