@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class PaymentActivity extends AppCompatActivity {
 
-    private String chefId, customer_flat_number, phone, customer_street_address, orderDetails, serviceCharge, deliveryCharge, deliveryInstructions;
+    private String chefId, customer_flat_number, phone, customer_street_address, orderDetails, serviceCharge, deliveryCharge, deliveryInstructions, couponCode;
     private Button buttonPlaceOrder;
 
     @Override
@@ -55,6 +55,7 @@ public class PaymentActivity extends AppCompatActivity {
         orderDetails = intent.getStringExtra("orderDetails");
         serviceCharge = intent.getStringExtra("serviceCharge");
         deliveryInstructions = intent.getStringExtra("delivery_instructions");
+        couponCode = intent.getStringExtra("coupon_code");
         deliveryCharge = intent.getStringExtra("deliveryCharge");
 
 
@@ -172,6 +173,7 @@ public class PaymentActivity extends AppCompatActivity {
                 params.put("stripe_token", stripeToken);
                 params.put("delivery_charge", deliveryCharge);
                 params.put("service_charge", serviceCharge);
+                params.put("coupon", couponCode);
                 params.put("customer_street_address", customer_street_address);
                 params.put("customer_flat_number", customer_flat_number);
                 params.put("phone", phone);

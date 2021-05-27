@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +17,20 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 import com.urbanshef.urbanshefapp.AppDatabase;
 import com.urbanshef.urbanshefapp.R;
 import com.urbanshef.urbanshefapp.objects.Basket;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Locale;
@@ -37,21 +48,22 @@ public class MealDetailActivity extends AppCompatActivity {
         final String chefId = intent.getStringExtra("chefId");
         final String mealId = intent.getStringExtra("mealId");
         final String mealName = intent.getStringExtra("mealName");
-//        String mealDescription = intent.getStringExtra("mealDescription");
+        String mealDescription = intent.getStringExtra("mealDescription");
         final Float mealPrice = intent.getFloatExtra("mealPrice", 0);
         String mealImage = intent.getStringExtra("mealImage");
 
         getSupportActionBar().setTitle(mealName);
 
         TextView name = (TextView) findViewById(R.id.meal_name);
-//        TextView desc = (TextView) findViewById(R.id.meal_desc);
-        final Button price =  findViewById(R.id.meal_price);
+        final Button price = findViewById(R.id.meal_price);
         ImageView image = (ImageView) findViewById(R.id.meal_picture);
 
         name.setText(mealName);
 //        desc.setText(mealDescription);
         price.setText(String.format(Locale.getDefault(), "£%.2f", mealPrice));
-        Picasso.get().load(mealImage).fit().centerCrop().into(image);
+        if (mealImage != null && !mealImage.isEmpty()) {
+            Picasso.get().load(mealImage).fit().centerCrop().into(image);
+        }
 
         // Declare buttons
         final TextView labelQuantity = (TextView) findViewById(R.id.label_quantity);
@@ -93,9 +105,11 @@ public class MealDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int qty = Integer.parseInt(labelQuantity.getText().toString());
-                validateBasket(mealId, mealName, mealPrice, qty, chefId);
+                validateBasket(mealId, mealName, mealPrice, qty, chefId, mealDescription, mealImage);
             }
         });
+
+        getAllergensDetails(mealId);
     }
 
     @Override
@@ -105,7 +119,7 @@ public class MealDetailActivity extends AppCompatActivity {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private void insertBasket(final String mealId, final String mealName, final float mealPrice, final int mealQty, final String chefId) {
+    private void insertBasket(final String mealId, final String mealName, final float mealPrice, final int mealQty, final String chefId, final String mealDescription, final String mealImage) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
@@ -115,6 +129,8 @@ public class MealDetailActivity extends AppCompatActivity {
                 basket.setMealPrice(mealPrice);
                 basket.setMealQuantity(mealQty);
                 basket.setChefId(chefId);
+                basket.setMealDescription(mealDescription);
+                basket.setMealImage(mealImage);
 
                 db.basketDao().insertAll(basket);
                 return null;
@@ -171,7 +187,7 @@ public class MealDetailActivity extends AppCompatActivity {
     }
 
     @SuppressLint("StaticFieldLeak")
-    public void validateBasket(final String mealId, final String mealName, final float mealPrice, final int mealQuantity, final String chefId) {
+    public void validateBasket(final String mealId, final String mealName, final float mealPrice, final int mealQuantity, final String chefId, final String mealDescription, final String mealImage) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -208,14 +224,14 @@ public class MealDetailActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             deleteBasket();
-                            insertBasket(mealId, mealName, mealPrice, mealQuantity, chefId);
+                            insertBasket(mealId, mealName, mealPrice, mealQuantity, chefId, mealDescription, mealImage);
                         }
                     });
 
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 } else if (result.equals("NOT_EXIST")) {
-                    insertBasket(mealId, mealName, mealPrice, mealQuantity, chefId);
+                    insertBasket(mealId, mealName, mealPrice, mealQuantity, chefId, mealDescription, mealImage);
 
                 } else {
                     // Show an alert
@@ -236,5 +252,42 @@ public class MealDetailActivity extends AppCompatActivity {
 
             }
         }.execute();
+    }
+
+    private void getAllergensDetails(String mealId) {
+        String url = String.format("%s/customer/allergens/%s/", getString(R.string.API_URL), mealId);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray allergens = response.getJSONArray("allergens");
+                            if (allergens.length() > 0) {
+                                StringBuilder allergensContents = new StringBuilder();
+                                for (int i = 0; i < allergens.length(); i++) {
+                                    allergensContents.append(allergens.getString(i) + (i == allergens.length() -1 ? "" : ", "));
+                                }
+                                TextView description = findViewById(R.id.description);
+                                String resultString = String.format(Locale.getDefault(), "%s\n\nContains : %s", description.getText().toString(), allergensContents);
+                                ((TextView) findViewById(R.id.description)).setText(resultString);
+                            }
+                        } catch (JSONException ex) {
+                            Log.e("JSONException", "" + ex.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("VolleyError", "" + error.toString());
+                    }
+                }
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
     }
 }
