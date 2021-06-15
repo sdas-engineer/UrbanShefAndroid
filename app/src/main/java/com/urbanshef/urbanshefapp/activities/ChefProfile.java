@@ -40,15 +40,10 @@ import java.util.Random;
 
 public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback {
 
-
-
     RecyclerView recyclerView;
     private ArrayList<Meal> mealArrayList;
     private MealAdapter adapter;
     Chef chef;
-
-
-
     ImageView chefImage;
     ImageView imgChef;
     TextView txtChefBio;
@@ -73,11 +68,10 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
 
     private void setVals ()
     {
-
         chef=(Chef) getIntent().getExtras().getSerializable("Chef");
         //getSupportActionBar().setTitle(chef.getName());
         mealArrayList = new ArrayList<Meal>();
-        adapter = new MealAdapter(this, mealArrayList, String.valueOf(chef.getId()));
+        adapter = new MealAdapter(this, mealArrayList, chef);
         recyclerView.setAdapter(adapter);
 
 
@@ -92,9 +86,6 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
 
     private void initViews ()
     {
-
-
-
         txtAddress=findViewById(R.id.txtAddress);
         imgChef=findViewById(R.id.imgChef);
         chefImage=findViewById(R.id.chefImage);
@@ -103,11 +94,6 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
         txtReview=findViewById(R.id.txtReview);
         recyclerView=findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
-
-
-
-
-
     }
 
 

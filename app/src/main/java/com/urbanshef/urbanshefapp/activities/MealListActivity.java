@@ -42,7 +42,7 @@ public class MealListActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(chefName);
 
         mealArrayList = new ArrayList<Meal>();
-        adapter = new MealAdapter(this, mealArrayList, chefId);
+        adapter = new MealAdapter(this, mealArrayList, null);
 
         ListView listView = (ListView) findViewById(R.id.meal_list);
        // listView.setAdapter(adapter);

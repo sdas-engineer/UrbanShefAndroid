@@ -30,6 +30,9 @@ public class Basket {
     @ColumnInfo(name = "meal_image")
     private String mealImage;
 
+    @ColumnInfo(name = "delivery_time")
+    private String deliveryTime;
+
     public int getId() {
         return id;
     }
@@ -92,5 +95,13 @@ public class Basket {
 
     public void setMealImage(String mealImage) {
         this.mealImage = mealImage;
+    }
+
+    public String getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(String deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 }

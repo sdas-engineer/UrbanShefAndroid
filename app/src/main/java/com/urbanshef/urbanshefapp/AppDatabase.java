@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.urbanshef.urbanshefapp.objects.Basket;
 
-@Database(entities = {Basket.class}, version = 2)
+@Database(entities = {Basket.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     private static  AppDatabase db;
 

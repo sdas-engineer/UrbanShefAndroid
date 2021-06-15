@@ -48,15 +48,17 @@ public class MealDetailActivity extends AppCompatActivity {
         final String chefId = intent.getStringExtra("chefId");
         final String mealId = intent.getStringExtra("mealId");
         final String mealName = intent.getStringExtra("mealName");
-        String mealDescription = intent.getStringExtra("mealDescription");
+        String mealDescriptions = intent.getStringExtra("mealDescription");
         final Float mealPrice = intent.getFloatExtra("mealPrice", 0);
         String mealImage = intent.getStringExtra("mealImage");
+        String deliveryTime = intent.getStringExtra("deliveryTime");
 
         getSupportActionBar().setTitle(mealName);
 
         TextView name = (TextView) findViewById(R.id.meal_name);
         final Button price = findViewById(R.id.meal_price);
         ImageView image = (ImageView) findViewById(R.id.meal_picture);
+        TextView mealDescription = (TextView) findViewById(R.id.meal_description);
 
         name.setText(mealName);
 //        desc.setText(mealDescription);
@@ -64,6 +66,7 @@ public class MealDetailActivity extends AppCompatActivity {
         if (mealImage != null && !mealImage.isEmpty()) {
             Picasso.get().load(mealImage).fit().centerCrop().into(image);
         }
+        mealDescription.setText(mealDescriptions);
 
         // Declare buttons
         final TextView labelQuantity = (TextView) findViewById(R.id.label_quantity);
@@ -105,7 +108,7 @@ public class MealDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int qty = Integer.parseInt(labelQuantity.getText().toString());
-                validateBasket(mealId, mealName, mealPrice, qty, chefId, mealDescription, mealImage);
+                validateBasket(mealId, mealName, mealPrice, qty, chefId, mealDescriptions, mealImage, deliveryTime);
             }
         });
 
@@ -119,7 +122,7 @@ public class MealDetailActivity extends AppCompatActivity {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private void insertBasket(final String mealId, final String mealName, final float mealPrice, final int mealQty, final String chefId, final String mealDescription, final String mealImage) {
+    private void insertBasket(final String mealId, final String mealName, final float mealPrice, final int mealQty, final String chefId, final String mealDescription, final String mealImage, final String deliveryTime) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
@@ -131,6 +134,7 @@ public class MealDetailActivity extends AppCompatActivity {
                 basket.setChefId(chefId);
                 basket.setMealDescription(mealDescription);
                 basket.setMealImage(mealImage);
+                basket.setDeliveryTime(deliveryTime);
 
                 db.basketDao().insertAll(basket);
                 return null;
@@ -187,7 +191,7 @@ public class MealDetailActivity extends AppCompatActivity {
     }
 
     @SuppressLint("StaticFieldLeak")
-    public void validateBasket(final String mealId, final String mealName, final float mealPrice, final int mealQuantity, final String chefId, final String mealDescription, final String mealImage) {
+    public void validateBasket(final String mealId, final String mealName, final float mealPrice, final int mealQuantity, final String chefId, final String mealDescription, final String mealImage, final String deliveryTime) {
         new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -224,14 +228,14 @@ public class MealDetailActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             deleteBasket();
-                            insertBasket(mealId, mealName, mealPrice, mealQuantity, chefId, mealDescription, mealImage);
+                            insertBasket(mealId, mealName, mealPrice, mealQuantity, chefId, mealDescription, mealImage, deliveryTime);
                         }
                     });
 
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 } else if (result.equals("NOT_EXIST")) {
-                    insertBasket(mealId, mealName, mealPrice, mealQuantity, chefId, mealDescription, mealImage);
+                    insertBasket(mealId, mealName, mealPrice, mealQuantity, chefId, mealDescription, mealImage, deliveryTime);
 
                 } else {
                     // Show an alert
@@ -270,9 +274,9 @@ public class MealDetailActivity extends AppCompatActivity {
                                 for (int i = 0; i < allergens.length(); i++) {
                                     allergensContents.append(allergens.getString(i) + (i == allergens.length() -1 ? "" : ", "));
                                 }
-                                TextView description = findViewById(R.id.description);
-                                String resultString = String.format(Locale.getDefault(), "%s\n\nContains : %s", description.getText().toString(), allergensContents);
-                                ((TextView) findViewById(R.id.description)).setText(resultString);
+                                TextView containsLabel = findViewById(R.id.meal_contains);
+                                String resultString = String.format(Locale.getDefault(), "Contains : %s", allergensContents);
+                                containsLabel.setText(resultString);
                             }
                         } catch (JSONException ex) {
                             Log.e("JSONException", "" + ex.toString());

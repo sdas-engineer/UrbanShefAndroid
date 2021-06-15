@@ -203,6 +203,8 @@ public class BasketFragment extends BaseFragment implements OnDeleteCallBack, Vi
 
                     intent.putExtra("coupon_code", couponTextField.getText().toString());
 
+                    intent.putExtra("deliveryTime", basketList.get(0).getDeliveryTime());
+
                     startActivity(intent);
                 }
             }

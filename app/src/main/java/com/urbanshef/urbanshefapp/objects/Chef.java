@@ -59,6 +59,11 @@ public class Chef  implements Serializable
     @Expose
     private String gender;
 
+    @SerializedName("delivery_time")
+    @Expose
+    private String delivery_time;
+
+
     public Integer getId() {
         return id;
     }
@@ -195,4 +200,11 @@ public class Chef  implements Serializable
         this.gender = gender;
     }
 
+    public String getDelivery_time() {
+        return delivery_time;
+    }
+
+    public void setDelivery_time(String delivery_time) {
+        this.delivery_time = delivery_time;
+    }
 }

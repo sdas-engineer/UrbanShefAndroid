@@ -20,6 +20,7 @@
             app:srcCompat="@drawable/blank_image" />
 
         <LinearLayout
+            android:id="@+id/delivery_time_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -33,6 +34,7 @@
             android:paddingBottom="@dimen/padding_medium">
 
             <TextView
+                android:id="@+id/delivery_time_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="60–120"
@@ -41,6 +43,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/delivery_time_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

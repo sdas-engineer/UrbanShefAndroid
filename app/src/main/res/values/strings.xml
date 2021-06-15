@@ -23,4 +23,5 @@
     <string name="msg_invalid_coupon_code">Invalid Coupon code</string>
     <string name="please_wait">Please wait....</string>
     <string name="applying_coupon">Applying Coupon</string>
+    <string name="msg_invalid_pre_order_date">Invalid Pre order date/time</string>
 </resources>

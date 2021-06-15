@@ -109,7 +109,6 @@ public class ChefListFragment extends Fragment {
                         {
                             try
                             {
-
                                 Location locationB=new Location("");
 
                                 double lat=Double.parseDouble(chef.getChefStreetAddress().getLatitude());
@@ -118,22 +117,16 @@ public class ChefListFragment extends Fragment {
                                 locationB.setLatitude(lat);
                                 locationB.setLongitude(lng);
 
-
                                 if(shouldAdd(locationA,locationB))
                                 {
-
                                     chefArrayList.add(chef);
                                     OrigArrayList.add(chef);
-
                                 }
-
                             }
                             catch (Exception e)
                             {
                                 e.printStackTrace();
                             }
-
-
                         }
 
                         txtEmpty.setVisibility(chefArrayList.isEmpty()?View.VISIBLE:View.GONE);

@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class PaymentActivity extends AppCompatActivity {
 
-    private String chefId, customer_flat_number, phone, customer_street_address, orderDetails, serviceCharge, deliveryCharge, deliveryInstructions, couponCode;
+    private String chefId, customer_flat_number, phone, customer_street_address, orderDetails, serviceCharge, deliveryCharge, deliveryInstructions, couponCode, preOrder;
     private Button buttonPlaceOrder;
 
     @Override
@@ -57,8 +57,7 @@ public class PaymentActivity extends AppCompatActivity {
         deliveryInstructions = intent.getStringExtra("delivery_instructions");
         couponCode = intent.getStringExtra("coupon_code");
         deliveryCharge = intent.getStringExtra("deliveryCharge");
-
-
+        preOrder = intent.getStringExtra("pre_order");
 
         final CardInputWidget mCardInputWidget = (CardInputWidget) findViewById(R.id.card_input_widget);
 
@@ -179,6 +178,7 @@ public class PaymentActivity extends AppCompatActivity {
                 params.put("phone", phone);
                 params.put("order_details", orderDetails);
                 params.put("delivery_instructions", deliveryInstructions);
+                params.put("pre_order", preOrder);
                 return params;
             }
         };
