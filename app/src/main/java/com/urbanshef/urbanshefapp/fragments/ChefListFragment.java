@@ -153,7 +153,6 @@ public class ChefListFragment extends Fragment {
 
     public boolean shouldAdd(Location A,Location B)   //This Function Returns Full Address In Text Format If We Provide it Lat And Long Of Some Palce
     {
-
         float km = A.distanceTo(B)/1000;
         System.out.println("DISTANCE : "+km);
         return km * 0.621371 <= 6;

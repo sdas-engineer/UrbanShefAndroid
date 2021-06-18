@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "242643314018",
+    "project_id": "urbanshef-app",
+    "storage_bucket": "urbanshef-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242643314018:android:8f1665dfd19a827fcb383b",
+        "android_client_info": {
+          "package_name": "com.urbanshef.urbanshefapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "242643314018-29c2ms084s9to5mm2llq6mbm0fmdhjrk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.urbanshef.urbanshefapp",
+            "certificate_hash": "aa2a75945ec70afe54f1048c22f87474518f8374"
+          }
+        },
+        {
+          "client_id": "242643314018-kbcv1hpeg3pd3mqla3av3an3pij82jh6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxlJhCfYo1LGFJvwz8QIrr2zFPPjfMWn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "242643314018-kbcv1hpeg3pd3mqla3av3an3pij82jh6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
