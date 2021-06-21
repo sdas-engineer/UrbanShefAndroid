@@ -24,11 +24,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.urbanshef.urbanshefapp.ImageUrlValidationListener;
 import com.urbanshef.urbanshefapp.R;
 import com.urbanshef.urbanshefapp.adapters.MealAdapter;
 import com.urbanshef.urbanshefapp.objects.Chef;
 import com.urbanshef.urbanshefapp.objects.Meal;
 import com.urbanshef.urbanshefapp.utils.CircleTransform;
+import com.urbanshef.urbanshefapp.utils.CommonMethods;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,9 +55,9 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap mMap;
 
     TextView txtReview;
+
     @Override
-    protected void onCreate (Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chef_profile);
         initViews();
@@ -66,9 +68,8 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void setVals ()
-    {
-        chef=(Chef) getIntent().getExtras().getSerializable("Chef");
+    private void setVals() {
+        chef = (Chef) getIntent().getExtras().getSerializable("Chef");
         //getSupportActionBar().setTitle(chef.getName());
         mealArrayList = new ArrayList<Meal>();
         adapter = new MealAdapter(this, mealArrayList, chef);
@@ -77,23 +78,33 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
 
         txtAddress.setText(chef.getChefStreetAddress().getPlace());
         txtChefBio.setText(chef.getBio());
-        txtWhereToFind.setText("Where To Find "+chef.getName());
-        Picasso.get().load(chef.getPicture()).fit().transform(new CircleTransform()).into(chefImage);
+        txtWhereToFind.setText("Where To Find " + chef.getName());
+
+        CommonMethods.loadImageFromPath(chef.getPicture(), new ImageUrlValidationListener() {
+            @Override
+            public void imageUrlValidationSuccess(String imageUrl) {
+                Picasso.get().load(imageUrl).fit().transform(new CircleTransform()).into(chefImage);
+            }
+
+            @Override
+            public void imageUrlValidationFailure(String imageUrl) {
+
+            }
+        });
 
         getMeals(String.valueOf(chef.getId()));
-       // getReview(String.valueOf(chef.getId()));
+        // getReview(String.valueOf(chef.getId()));
     }
 
-    private void initViews ()
-    {
-        txtAddress=findViewById(R.id.txtAddress);
-        imgChef=findViewById(R.id.imgChef);
-        chefImage=findViewById(R.id.chefImage);
-        txtChefBio=findViewById(R.id.txtBio);
-        txtWhereToFind=findViewById(R.id.txtwhereToFind);
-        txtReview=findViewById(R.id.txtReview);
-        recyclerView=findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
+    private void initViews() {
+        txtAddress = findViewById(R.id.txtAddress);
+        imgChef = findViewById(R.id.imgChef);
+        chefImage = findViewById(R.id.chefImage);
+        txtChefBio = findViewById(R.id.txtBio);
+        txtWhereToFind = findViewById(R.id.txtwhereToFind);
+        txtReview = findViewById(R.id.txtReview);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
     }
 
 
@@ -112,10 +123,9 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
                 },
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
+                    public void onErrorResponse(VolleyError error) {
                         txtReview.setText("No Review Found");
-                        System.out.println("ERRRROR :::::"+error.getMessage());
+                        System.out.println("ERRRROR :::::" + error.getMessage());
                     }
                 }
         );
@@ -125,11 +135,10 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-
     private void getMeals(String chefId) {
         String url = String.format("%s/customer/meals/%s/", getString(R.string.API_URL), chefId);
 
-        System.out.println("URL : "+url);
+        System.out.println("URL : " + url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -139,7 +148,7 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
                     public void onResponse(JSONObject response) {
 
 
-                        String s=response.toString();
+                        String s = response.toString();
 
                         // Convert JSON data to JSON Array
                         JSONArray mealsJSONArray = null;
@@ -155,7 +164,17 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
                         Meal[] meals = gson.fromJson(mealsJSONArray.toString(), Meal[].class);
 
 
-                        Picasso.get().load(meals[new Random().nextInt(meals.length)].getImage()).placeholder(R.drawable.ic_loading).error(R.drawable.ic_default).fit().centerCrop().into(imgChef);
+                        CommonMethods.loadImageFromPath(meals[new Random().nextInt(meals.length)].getImage(), new ImageUrlValidationListener() {
+                            @Override
+                            public void imageUrlValidationSuccess(String imageUrl) {
+                                Picasso.get().load(imageUrl).placeholder(R.drawable.ic_loading).error(R.drawable.ic_default).fit().centerCrop().into(imgChef);
+                            }
+
+                            @Override
+                            public void imageUrlValidationFailure(String imageUrl) {
+
+                            }
+                        });
 
                         // Refresh ListView with up-to-date data
                         mealArrayList.clear();
@@ -166,7 +185,7 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        System.out.println("ERRRROR :::::"+error.getMessage());
+                        System.out.println("ERRRROR :::::" + error.getMessage());
                     }
                 }
         );
@@ -176,20 +195,20 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onMapReady (GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap) {
 
-        mMap=googleMap;
-        LatLng latLng=new LatLng(Double.parseDouble(chef.getChefStreetAddress().getLatitude()),Double.parseDouble(chef.getChefStreetAddress().getLongitude()));
+        mMap = googleMap;
+        LatLng latLng = new LatLng(Double.parseDouble(chef.getChefStreetAddress().getLatitude()), Double.parseDouble(chef.getChefStreetAddress().getLongitude()));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         mMap.addMarker(new MarkerOptions().position(latLng).title(chef.getName()));
     }
 
-    public void onClickBack (View view) {
+    public void onClickBack(View view) {
         onBackPressed();
     }
 
     @Override
-    public void onBackPressed () {
+    public void onBackPressed() {
         super.onBackPressed();
         finish();
     }

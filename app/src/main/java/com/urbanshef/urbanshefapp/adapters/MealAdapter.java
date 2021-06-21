@@ -12,11 +12,13 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+import com.urbanshef.urbanshefapp.ImageUrlValidationListener;
 import com.urbanshef.urbanshefapp.OnDeleteCallBack;
 import com.urbanshef.urbanshefapp.R;
 import com.urbanshef.urbanshefapp.activities.MealDetailActivity;
 import com.urbanshef.urbanshefapp.objects.Chef;
 import com.urbanshef.urbanshefapp.objects.Meal;
+import com.urbanshef.urbanshefapp.utils.CommonMethods;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -47,7 +49,18 @@ public class MealAdapter extends RecyclerView.Adapter {
 
         viewHolder.mealName.setText(meal.getName());
         viewHolder.mealPrice.setText(String.format(Locale.getDefault(), "£%.2f", meal.getPrice()));
-        Picasso.get().load(meal.getImage()).placeholder(R.drawable.ic_loading).fit().centerCrop().into(viewHolder.mealImage);
+
+        CommonMethods.loadImageFromPath(meal.getImage(), new ImageUrlValidationListener() {
+            @Override
+            public void imageUrlValidationSuccess(String imageUrl) {
+                Picasso.get().load(imageUrl).placeholder(R.drawable.ic_loading).fit().centerCrop().into(viewHolder.mealImage);
+            }
+
+            @Override
+            public void imageUrlValidationFailure(String imageUrl) {
+
+            }
+        });
 
         if(meal.getDiet() != null && !meal.getDiet().isEmpty()){
             viewHolder.mealDietContainer.setVisibility(View.VISIBLE);

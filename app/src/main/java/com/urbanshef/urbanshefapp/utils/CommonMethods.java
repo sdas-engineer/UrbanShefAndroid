@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.urbanshef.urbanshefapp.ImageUrlValidationListener;
+
 public class CommonMethods {
 
     public static void hideKeyboard(Activity activity) {
@@ -16,6 +18,14 @@ public class CommonMethods {
                 view = new View(activity);
             }
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    public static void loadImageFromPath(String imageUrl, ImageUrlValidationListener urlValidationListener) {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            urlValidationListener.imageUrlValidationSuccess(imageUrl);
+        } else {
+            urlValidationListener.imageUrlValidationFailure(imageUrl);
         }
     }
 }

@@ -32,11 +32,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
+import com.urbanshef.urbanshefapp.ImageUrlValidationListener;
 import com.urbanshef.urbanshefapp.R;
 import com.urbanshef.urbanshefapp.fragments.BasketFragment;
 import com.urbanshef.urbanshefapp.fragments.ChefListFragment;
 import com.urbanshef.urbanshefapp.fragments.OrderFragment;
 import com.urbanshef.urbanshefapp.utils.CircleTransform;
+import com.urbanshef.urbanshefapp.utils.CommonMethods;
 import com.urbanshef.urbanshefapp.utils.LocationProvider;
 
 import java.io.IOException;
@@ -51,21 +53,21 @@ public class CustomerMainActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
     TextView txtMyLocation;
     LocationProvider locationProvider;
-    public  static LatLng UserLatLng;
-    static  boolean needsToUpdateLocation=true;
+    public static LatLng UserLatLng;
+    static boolean needsToUpdateLocation = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main);
-        needsToUpdateLocation=true;
+        needsToUpdateLocation = true;
         loadLocation();
     }
 
-    private void intialize ()
-    {
+    private void intialize() {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        txtMyLocation=findViewById(R.id.txtMyLocation);
+        txtMyLocation = findViewById(R.id.txtMyLocation);
 
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
@@ -133,58 +135,60 @@ public class CustomerMainActivity extends AppCompatActivity {
         TextView customer_name = (TextView) header.findViewById(R.id.customer_name);
 
         customer_name.setText(sharedPref.getString("name", ""));
-        Picasso.get().load(sharedPref.getString("avatar", "")).transform(new CircleTransform()).into(customer_avatar);
 
+        CommonMethods.loadImageFromPath(sharedPref.getString("avatar", ""), new ImageUrlValidationListener() {
+            @Override
+            public void imageUrlValidationSuccess(String imageUrl) {
+                Picasso.get().load(imageUrl).transform(new CircleTransform()).into(customer_avatar);
+            }
+
+            @Override
+            public void imageUrlValidationFailure(String imageUrl) {
+
+            }
+        });
     }
 
-    private void loadLocation()
-    {
-        ProgressDialog pb=new ProgressDialog(this);
+    private void loadLocation() {
+        ProgressDialog pb = new ProgressDialog(this);
         pb.setCancelable(false);
         pb.show();
         locationProvider = new LocationProvider.Builder(this)
                 .setInterval(5000)
                 .setFastestInterval(2000)
-                .setListener(new LocationProvider.MLocationCallback()
-                {
+                .setListener(new LocationProvider.MLocationCallback() {
 
                     @Override
-                    public void onGoogleAPIClient(GoogleApiClient googleApiClient, String message)
-                    {
+                    public void onGoogleAPIClient(GoogleApiClient googleApiClient, String message) {
 
                     }
 
                     @Override
-                    public void onLocationUpdated(double latitude, double longitude)
-                    {
+                    public void onLocationUpdated(double latitude, double longitude) {
 
-                        if(!needsToUpdateLocation)
+                        if (!needsToUpdateLocation)
                             return;
 
 
-                        if(pb.isShowing())
-                        {
+                        if (pb.isShowing()) {
                             pb.dismiss();
                             intialize();
                         }
-                        UserLatLng=new LatLng(latitude,longitude);
+                        UserLatLng = new LatLng(latitude, longitude);
                         Geocoder coder = new Geocoder(CustomerMainActivity.this);
                         try {
                             ArrayList<Address> addresses = (ArrayList<Address>) coder.getFromLocation(
                                     latitude, longitude, 1
                             );
 
-                            if (!addresses.isEmpty())
-                            {
+                            if (!addresses.isEmpty()) {
                                 txtMyLocation.setText(addresses.get(0).getAddressLine(0));
                                 txtMyLocation.setEllipsize(TextUtils.TruncateAt.MARQUEE);
                                 txtMyLocation.setSelected(true);
-                                txtMyLocation.setOnClickListener(new View.OnClickListener()
-                                {
+                                txtMyLocation.setOnClickListener(new View.OnClickListener() {
                                     @Override
-                                    public void onClick(View v)
-                                    {
-                                        startActivityForResult(new Intent(CustomerMainActivity.this,MapsActivity.class).putExtra("Lat",latitude).putExtra("Long",longitude),001);
+                                    public void onClick(View v) {
+                                        startActivityForResult(new Intent(CustomerMainActivity.this, MapsActivity.class).putExtra("Lat", latitude).putExtra("Long", longitude), 001);
                                     }
                                 });
                             }
@@ -194,8 +198,7 @@ public class CustomerMainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onLocationUpdateRemoved()
-                    {
+                    public void onLocationUpdateRemoved() {
 
                     }
 
@@ -216,16 +219,13 @@ public class CustomerMainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==001)
-        {
-            if(resultCode==RESULT_OK)
-            {
+        if (requestCode == 001) {
+            if (resultCode == RESULT_OK) {
                 locationProvider.removeUpdates();
-                needsToUpdateLocation=false;
+                needsToUpdateLocation = false;
                 txtMyLocation.setText(data.getExtras().getString("NewLocation"));
             }
         }

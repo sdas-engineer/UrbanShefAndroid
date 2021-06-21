@@ -24,10 +24,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
+import com.urbanshef.urbanshefapp.ImageUrlValidationListener;
 import com.urbanshef.urbanshefapp.R;
 import com.urbanshef.urbanshefapp.activities.DriverMainActivity;
 import com.urbanshef.urbanshefapp.fragments.DeliveryFragment;
 import com.urbanshef.urbanshefapp.objects.Order;
+import com.urbanshef.urbanshefapp.utils.CommonMethods;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,7 +84,18 @@ public class OrderAdapter extends BaseAdapter {
 //        customerFlat.setText(order.getCustomerFlat());
         customerAddress.setText(order.getCustomerAddress());
         customerPhone.setText(order.getCustomerPhone());
-        Picasso.get().load(order.getCustomerImage()).fit().centerCrop().into(customerImage);
+
+        CommonMethods.loadImageFromPath(order.getCustomerImage(), new ImageUrlValidationListener() {
+            @Override
+            public void imageUrlValidationSuccess(String imageUrl) {
+                Picasso.get().load(imageUrl).fit().centerCrop().into(customerImage);
+            }
+
+            @Override
+            public void imageUrlValidationFailure(String imageUrl) {
+
+            }
+        });
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

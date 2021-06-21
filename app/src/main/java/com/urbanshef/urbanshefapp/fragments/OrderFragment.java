@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -40,6 +41,7 @@ import com.urbanshef.urbanshefapp.R;
 import com.urbanshef.urbanshefapp.adapters.BasketAdapter;
 import com.urbanshef.urbanshefapp.objects.Basket;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,23 +75,25 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         basketList = new ArrayList<Basket>();
         adapter = new BasketAdapter(this.getActivity(), basketList);
 
-        ListView listView = (ListView) getActivity().findViewById(R.id.basket_list);
+        ListView listView = (ListView) view.findViewById(R.id.basket_list);
         listView.setAdapter(adapter);
 
-        statusView = (Button) getActivity().findViewById(R.id.status);
+        statusView = (Button) view.findViewById(R.id.status);
 
         // Get The Latest Order Data
         getLatestOrder();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.order_map);
-        mapFragment.getMapAsync(this);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
 
         // Get the Driver's location
         getDriverLocation();
@@ -188,7 +192,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                             try {
                                 JSONObject orderDetail = orderDetailsArray.getJSONObject(i);
                                 basket.setMealName(orderDetail.getJSONObject("meal").getString("name"));
-                                basket.setMealPrice((float)orderDetail.getJSONObject("meal").getDouble("price"));
+                                basket.setMealPrice((float) orderDetail.getJSONObject("meal").getDouble("price"));
                                 basket.setMealQuantity(orderDetail.getInt("quantity"));
 
                             } catch (JSONException e) {

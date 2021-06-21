@@ -17,10 +17,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.urbanshef.urbanshefapp.ImageUrlValidationListener;
 import com.urbanshef.urbanshefapp.R;
 import com.urbanshef.urbanshefapp.activities.ChefProfile;
 import com.urbanshef.urbanshefapp.objects.Chef;
 import com.urbanshef.urbanshefapp.objects.Meal;
+import com.urbanshef.urbanshefapp.utils.CommonMethods;
 import com.urbanshef.urbanshefapp.utils.Constants;
 
 import org.json.JSONArray;
@@ -119,9 +121,18 @@ public class ChefAdapter extends BaseAdapter {
                         Meal[] meals = gson.fromJson(mealsJSONArray.toString(), Meal[].class);
 
 
-                        Picasso.get().load(meals[new Random().nextInt(meals.length)].getImage()).placeholder(R.drawable.ic_loading).error(R.drawable.blank_image)
-                                .fit().centerCrop().into(chePicture);
+                        CommonMethods.loadImageFromPath(meals[new Random().nextInt(meals.length)].getImage(), new ImageUrlValidationListener() {
+                            @Override
+                            public void imageUrlValidationSuccess(String imageUrl) {
+                                Picasso.get().load(imageUrl).placeholder(R.drawable.ic_loading).error(R.drawable.blank_image)
+                                        .fit().centerCrop().into(chePicture);
+                            }
 
+                            @Override
+                            public void imageUrlValidationFailure(String imageUrl) {
+
+                            }
+                        });
                     }
                 },
                 new Response.ErrorListener() {

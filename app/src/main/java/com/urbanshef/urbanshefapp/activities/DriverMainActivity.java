@@ -25,11 +25,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
+import com.urbanshef.urbanshefapp.ImageUrlValidationListener;
 import com.urbanshef.urbanshefapp.R;
 import com.urbanshef.urbanshefapp.fragments.DeliveryFragment;
 import com.urbanshef.urbanshefapp.fragments.OrderListFragment;
 import com.urbanshef.urbanshefapp.fragments.StatisticFragment;
 import com.urbanshef.urbanshefapp.utils.CircleTransform;
+import com.urbanshef.urbanshefapp.utils.CommonMethods;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +102,18 @@ public class DriverMainActivity extends AppCompatActivity {
         TextView customer_name = (TextView) header.findViewById(R.id.customer_name);
 
         customer_name.setText(sharedPref.getString("name", ""));
-        Picasso.get().load(sharedPref.getString("avatar", "")).transform(new CircleTransform()).into(customer_avatar);
+
+        CommonMethods.loadImageFromPath(sharedPref.getString("avatar", ""), new ImageUrlValidationListener() {
+            @Override
+            public void imageUrlValidationSuccess(String imageUrl) {
+                Picasso.get().load(imageUrl).transform(new CircleTransform()).into(customer_avatar);
+            }
+
+            @Override
+            public void imageUrlValidationFailure(String imageUrl) {
+
+            }
+        });
     }
 
     @Override

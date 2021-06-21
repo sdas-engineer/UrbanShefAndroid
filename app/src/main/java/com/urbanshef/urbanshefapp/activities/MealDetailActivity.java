@@ -25,8 +25,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 import com.urbanshef.urbanshefapp.AppDatabase;
+import com.urbanshef.urbanshefapp.ImageUrlValidationListener;
 import com.urbanshef.urbanshefapp.R;
 import com.urbanshef.urbanshefapp.objects.Basket;
+import com.urbanshef.urbanshefapp.utils.CommonMethods;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,9 +65,18 @@ public class MealDetailActivity extends AppCompatActivity {
         name.setText(mealName);
 //        desc.setText(mealDescription);
         price.setText(String.format(Locale.getDefault(), "£%.2f", mealPrice));
-        if (mealImage != null && !mealImage.isEmpty()) {
-            Picasso.get().load(mealImage).fit().centerCrop().into(image);
-        }
+        CommonMethods.loadImageFromPath(mealImage, new ImageUrlValidationListener() {
+            @Override
+            public void imageUrlValidationSuccess(String imageUrl) {
+                Picasso.get().load(imageUrl).fit().centerCrop().into(image);
+            }
+
+            @Override
+            public void imageUrlValidationFailure(String imageUrl) {
+
+            }
+        });
+
         mealDescription.setText(mealDescriptions);
 
         // Declare buttons
