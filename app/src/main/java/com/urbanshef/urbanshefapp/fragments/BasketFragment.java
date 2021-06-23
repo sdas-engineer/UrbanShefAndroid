@@ -277,10 +277,24 @@ public class BasketFragment extends BaseFragment implements OnDeleteCallBack, Vi
 
             if (applyDiscount) {
                 rootView.findViewById(R.id.ll_discount_amount).setVisibility(View.VISIBLE);
-                double discountAmount = subTotal * (discountPercent / 100.0f);
-                double updatedSubTotal = subTotal - discountAmount;
+
+                float discountedSubTotal = 0;
+                float updatedServiceCharges = 0;
+
+                for (Basket basket : basketList) {
+                    discountedSubTotal += (basket.getMealQuantity() * basket.getMealPrice());
+                }
+
+                double discountAmount = discountedSubTotal * (discountPercent / 100.0f);
+                double updatedSubTotal = discountedSubTotal - discountAmount;
                 discountTitle.setText(String.format(Locale.getDefault(), "Discount (%d%%)", discountPercent));
                 discountAmountLabel.setText(String.format(Locale.getDefault(), "£%.2f", discountAmount));
+
+                updatedSubTotal += 3;
+                updatedServiceCharges = (float) (0.10 * updatedSubTotal);
+                service_fee.setText(String.format(Locale.getDefault(), "£%.2f", updatedServiceCharges));
+                updatedSubTotal += updatedServiceCharges;
+
                 totalView.setText(String.format(Locale.getDefault(), "£%.2f", updatedSubTotal));
             } else {
                 rootView.findViewById(R.id.ll_discount_amount).setVisibility(View.GONE);
