@@ -157,13 +157,14 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button_add_payment"
+        android:id="@+id/button_checkout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="@color/colorAccent"
         android:fontFamily="@font/nunito_bold"
-        android:text="ADD PAYMENT"
+        android:text="@string/checkout"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 

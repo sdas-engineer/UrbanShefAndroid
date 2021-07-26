@@ -2,11 +2,18 @@ package com.urbanshef.urbanshefapp;
 
 import android.app.Application;
 
+import com.stripe.android.PaymentConfiguration;
+import com.urbanshef.urbanshefapp.utils.CommonMethods;
+
 public class App extends Application {
 
     @Override
     public void onCreate () {
         super.onCreate();
+        PaymentConfiguration.init(
+                getApplicationContext(),
+                CommonMethods.getTargetStripeKey(this)
+        );
 //        trustEveryone();
         //handleSSLHandshake();
     }

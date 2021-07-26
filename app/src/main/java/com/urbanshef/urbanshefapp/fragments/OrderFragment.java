@@ -116,8 +116,8 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
     private void drawRouteOnMap(JSONObject response) {
 
         try {
-            String chefAddress = response.getJSONObject("order").getJSONObject("chef").getString("chef_street_address");
-            String orderAddress = response.getJSONObject("order").getString("customer_street_address");
+            String chefAddress = response.getJSONObject("chef").getString("chef_street_address");
+            String orderAddress = response.getJSONObject("customer").getString("customer_street_address");
 
             Geocoder coder = new Geocoder(getActivity());
             ArrayList<Address> cheAddresses = (ArrayList<Address>) coder.getFromLocationName(chefAddress, 1);
@@ -162,8 +162,8 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                         String status = "";
 
                         try {
-                            orderDetailsArray = response.getJSONObject("order").getJSONArray("order_details");
-                            status = response.getJSONObject("order").getString("status");
+                            orderDetailsArray = response.getJSONArray("order_details");
+                            status = response.getString("status");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -171,7 +171,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                         // Check if the current user have no order, then show a message
                         if (orderDetailsArray == null || orderDetailsArray.length() == 0) {
                             TextView alertText = new TextView(getActivity());
-                            alertText.setText("You have no order");
+                            alertText.setText(getString(R.string.you_have_no_order));
                             alertText.setTextSize(17);
                             alertText.setGravity(Gravity.CENTER);
                             alertText.setLayoutParams(
@@ -187,22 +187,24 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                         }
 
                         // Add this to the ListView. Convert JSON object to Basket object
-                        for (int i = 0; i < orderDetailsArray.length(); i++) {
-                            Basket basket = new Basket();
-                            try {
-                                JSONObject orderDetail = orderDetailsArray.getJSONObject(i);
-                                basket.setMealName(orderDetail.getJSONObject("meal").getString("name"));
-                                basket.setMealPrice((float) orderDetail.getJSONObject("meal").getDouble("price"));
-                                basket.setMealQuantity(orderDetail.getInt("quantity"));
+                        if (orderDetailsArray != null) {
+                            for (int i = 0; i < orderDetailsArray.length(); i++) {
+                                Basket basket = new Basket();
+                                try {
+                                    JSONObject orderDetail = orderDetailsArray.getJSONObject(i);
+                                    basket.setMealName(orderDetail.getJSONObject("meal").getString("name"));
+                                    basket.setMealPrice((float) orderDetail.getJSONObject("meal").getDouble("price"));
+                                    basket.setMealQuantity(orderDetail.getInt("quantity"));
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                basketList.add(basket);
                             }
-                            basketList.add(basket);
-                        }
 
-                        // Update the ListView with Order Details data
-                        adapter.notifyDataSetChanged();
+                            // Update the ListView with Order Details data
+                            adapter.notifyDataSetChanged();
+                        }
 
                         // Update Status View
                         statusView.setText(status);

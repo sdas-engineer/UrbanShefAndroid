@@ -4,8 +4,9 @@
     <string name="fb_login_protocol_scheme">fb908238163257963</string>
 
 
-    <!--<string name="Stripe_Key">pk_test_51IgETmEw2z4sNX5Zaz6WUDuxwayVddZGLeoQpOkaTqU8iLsQVyPmEmD58QX0YOGQ9KXFLtLuQ0FOEynLnkAsii0s002BTwbiLa</string>-->
-    <string name="Stripe_Key">pk_live_51IgETmEw2z4sNX5Z1LbPvSdvSbcOfKJNmi9UWGhB90Mglfhd1fj3OPTFYKkDAVF3leClW5DaG7fuLfhdnFjotipI00SOijybju</string>
+    <string name="merchant_display_name">Urbanshef LTD.</string>
+    <string name="Test_Stripe_Key">pk_test_51IgETmEw2z4sNX5Zaz6WUDuxwayVddZGLeoQpOkaTqU8iLsQVyPmEmD58QX0YOGQ9KXFLtLuQ0FOEynLnkAsii0s002BTwbiLa</string>
+    <string name="Live_Stripe_Key">pk_live_51IgETmEw2z4sNX5Z1LbPvSdvSbcOfKJNmi9UWGhB90Mglfhd1fj3OPTFYKkDAVF3leClW5DaG7fuLfhdnFjotipI00SOijybju</string>
 
     <string name="API_URL">https://www.urbanshef.com/api</string>
     <string name="CLIENT_ID">ivtzXR4tEHkGTV6ZEtvvEwxFyemOXSX75af1DJ7j</string>
@@ -24,4 +25,14 @@
     <string name="please_wait">Please wait....</string>
     <string name="applying_coupon">Applying Coupon</string>
     <string name="msg_invalid_pre_order_date">Invalid Pre order date/time</string>
+    <string name="payment_cancelled">Payment Cancelled</string>
+    <string name="payment_failed">Payment Failed</string>
+    <string name="payment_completed">Payment Completed</string>
+    <string name="alert">Alert</string>
+    <string name="error">Error</string>
+    <string name="success">Success</string>
+    <string name="checkout">Checkout</string>
+    <string name="coupon">Coupon</string>
+    <string name="allergen_warning_text">Allergy warning : If you have a severe food allergy, we would recommend not ordering on the platform at this time.</string>
+    <string name="you_have_no_order">You have no order</string>
 </resources>

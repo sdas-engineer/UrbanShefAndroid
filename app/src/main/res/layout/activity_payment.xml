@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.PaymentActivity">
 
-    <com.stripe.android.view.CardInputWidget
+    <!--<com.stripe.android.view.CardInputWidget
         android:id="@+id/card_input_widget"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -15,7 +15,22 @@
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <Button
+        android:id="@+id/add_payment_method"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="7dp"
+        android:background="@color/colorAccent"
+        android:fontFamily="@font/nunito_bold"
+        android:text="Add"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/button_place_order"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/button_place_order"
@@ -26,7 +41,7 @@
         android:layout_marginBottom="5dp"
         android:background="@color/colorAccent"
         android:fontFamily="@font/nunito_bold"
-        android:text="PLACE ORDER"
+        android:text="Pay"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,6 +49,16 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="Payment Method"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@id/add_payment_method"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/add_payment_method" />
+
+    <!--<TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,5 +67,5 @@
         android:text="100% secure payment, powered by Stripe."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_input_widget" />
+        app:layout_constraintTop_toBottomOf="@+id/card_input_widget" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

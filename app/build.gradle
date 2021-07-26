@@ -6,23 +6,54 @@ apply plugin: 'com.google.gms.google-services' // Google Services Gradle plugin
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
+    signingConfigs {
+        releaseConfig {
+            storeFile file('/Volumes/Secondary Drive/Projects Workspace/Android/UrbanShefAndroid/MyAndroidKeyStore')
+            storePassword 'Voyotelgetkiki123#'
+            keyPassword 'Voyotelgetkiki123#'
+            keyAlias 'urbanshef_app'
+        }
+    }
     compileSdkVersion 30
 
     defaultConfig {
         applicationId "com.urbanshef.urbanshefapp"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 11
-        versionName "1.11"
+        versionCode 14
+        versionName "1.14"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled false
+//            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Specifies one flavor dimension.
+    flavorDimensions "Environment"
+
+    productFlavors {
+        UAT {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // If you are using only one dimension, this property is optional,
+            // and the plugin automatically assigns all the module's flavors to
+            // that dimension.
+            dimension "Environment"
+            signingConfig signingConfigs.releaseConfig
+
+        }
+
+        Production {
+            dimension "Environment"
+            signingConfig signingConfigs.releaseConfig
+
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -45,7 +76,9 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation "androidx.navigation:navigation-ui:2.3.5"
-    implementation 'com.stripe:stripe-android:16.1.1'
+    // Stripe Android SDK
+    implementation 'com.stripe:stripe-android:16.10.2'
+    implementation 'com.google.android.gms:play-services-wallet:18.1.3'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // Facebook Login only
     implementation 'com.facebook.android:facebook-login:8.1.0'
@@ -55,8 +88,8 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.github.code2080:DrawRouteMaps:1.1.0'
+    implementation 'com.google.android.play:core:1.10.0'
 
-  
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

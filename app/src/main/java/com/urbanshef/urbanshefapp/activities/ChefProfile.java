@@ -1,5 +1,7 @@
 package com.urbanshef.urbanshefapp.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -65,6 +67,17 @@ public class ChefProfile extends AppCompatActivity implements OnMapReadyCallback
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.basket_map);
         mapFragment.getMapAsync(this);
+
+        findViewById(R.id.fab_whatsapp_chat).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                CommonMethods.invokeWhatsAppChatIntent(ChefProfile.this, "+880 1763-433486", "Hey i am using WhatsApp");
+                String url = "https://tawk.to/chat/604d4397f7ce1827092fd0e3/1f0mt02k1";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
 
     }
 
