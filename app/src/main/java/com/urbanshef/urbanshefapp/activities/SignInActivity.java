@@ -52,7 +52,6 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        appUpdateManager = AppUpdateManagerFactory.create(this);
         customerButton = (Button) findViewById(R.id.button_customer);
         driverButton = (Button) findViewById(R.id.button_driver);
 
@@ -186,24 +185,24 @@ public class SignInActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        appUpdateManager
-                .getAppUpdateInfo()
-                .addOnSuccessListener(
-                        appUpdateInfo -> {
-                            if (appUpdateInfo.updateAvailability()
-                                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                                // If an in-app update is already running, resume the update.
-                                try {
-                                    appUpdateManager.startUpdateFlowForResult(
-                                            appUpdateInfo,
-                                            AppUpdateType.IMMEDIATE,
-                                            this,
-                                            IN_APP_UPDATE_REQUEST_CODE);
-                                } catch (IntentSender.SendIntentException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+//        appUpdateManager
+//                .getAppUpdateInfo()
+//                .addOnSuccessListener(
+//                        appUpdateInfo -> {
+//                            if (appUpdateInfo.updateAvailability()
+//                                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+//                                // If an in-app update is already running, resume the update.
+//                                try {
+//                                    appUpdateManager.startUpdateFlowForResult(
+//                                            appUpdateInfo,
+//                                            AppUpdateType.IMMEDIATE,
+//                                            this,
+//                                            IN_APP_UPDATE_REQUEST_CODE);
+//                                } catch (IntentSender.SendIntentException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        });
     }
 
 

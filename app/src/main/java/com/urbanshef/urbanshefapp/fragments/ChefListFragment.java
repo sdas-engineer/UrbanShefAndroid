@@ -1,6 +1,9 @@
 package com.urbanshef.urbanshefapp.fragments;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -26,6 +30,7 @@ import com.urbanshef.urbanshefapp.activities.CustomerMainActivity;
 import com.urbanshef.urbanshefapp.adapters.ChefAdapter;
 import com.urbanshef.urbanshefapp.objects.Chef;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +41,7 @@ public class ChefListFragment extends Fragment {
 
 
     private ArrayList<Chef> chefArrayList;
-    private ArrayList<Chef> OrigArrayList=new ArrayList<>();
+    private ArrayList<Chef> OrigArrayList = new ArrayList<>();
     private ChefAdapter adapter;
 
     ListView chefListView;
@@ -55,14 +60,13 @@ public class ChefListFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         chefArrayList = new ArrayList<Chef>();
         adapter = new ChefAdapter(this.getActivity(), chefArrayList);
 
-        chefListView = (ListView) getActivity().findViewById(R.id.chef_list);
-        txtEmpty=getActivity().findViewById(R.id.txtViewEmpty);
+        chefListView = (ListView) view.findViewById(R.id.chef_list);
+        txtEmpty = view.findViewById(R.id.txtViewEmpty);
         chefListView.setAdapter(adapter);
 
         // Get list of chefs
@@ -87,8 +91,7 @@ public class ChefListFragment extends Fragment {
                         // Convert JSON data to JSON Array
                         JSONArray chefsJSONArray = null;
 
-                        try
-                        {
+                        try {
                             chefsJSONArray = response.getJSONArray("chefs");
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -96,41 +99,36 @@ public class ChefListFragment extends Fragment {
 
                         // Convert Json Array to Chef Array
                         Gson gson = new Gson();
-                        Chef[]  chefs = gson.fromJson(chefsJSONArray.toString(), Chef[].class);
+                        Chef[] chefs = gson.fromJson(chefsJSONArray.toString(), Chef[].class);
 
                         // Refresh ListView with up-to-date data
                         chefArrayList.clear();
                         OrigArrayList.clear();
 
-                        Location locationA=new Location("");
+                        Location locationA = new Location("");
                         locationA.setLatitude(CustomerMainActivity.UserLatLng.latitude);
                         locationA.setLongitude(CustomerMainActivity.UserLatLng.longitude);
-                        for(Chef chef:chefs)
-                        {
-                            try
-                            {
-                                Location locationB=new Location("");
+                        for (Chef chef : chefs) {
+                            try {
+                                Location locationB = new Location("");
 
-                                double lat=Double.parseDouble(chef.getChefStreetAddress().getLatitude());
-                                double lng=Double.parseDouble(chef.getChefStreetAddress().getLongitude());
+                                double lat = Double.parseDouble(chef.getChefStreetAddress().getLatitude());
+                                double lng = Double.parseDouble(chef.getChefStreetAddress().getLongitude());
 
                                 locationB.setLatitude(lat);
                                 locationB.setLongitude(lng);
 
-                                if(shouldAdd(locationA,locationB))
-                                {
+                                if (shouldAdd(locationA, locationB)) {
                                     chefArrayList.add(chef);
                                     OrigArrayList.add(chef);
                                 }
-                            }
-                            catch (Exception e)
-                            {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
 
-                        txtEmpty.setVisibility(chefArrayList.isEmpty()?View.VISIBLE:View.GONE);
-                        chefListView.setVisibility(chefArrayList.isEmpty()?View.GONE:View.VISIBLE);
+                        txtEmpty.setVisibility(chefArrayList.isEmpty() ? View.VISIBLE : View.GONE);
+                        chefListView.setVisibility(chefArrayList.isEmpty() ? View.GONE : View.VISIBLE);
 
                         //chefArrayList.addAll(new ArrayList<Chef>(Arrays.asList(chefs)));
                         adapter.notifyDataSetChanged();
@@ -149,12 +147,10 @@ public class ChefListFragment extends Fragment {
     }
 
 
-
-
-    public boolean shouldAdd(Location A,Location B)   //This Function Returns Full Address In Text Format If We Provide it Lat And Long Of Some Palce
+    public boolean shouldAdd(Location A, Location B)   //This Function Returns Full Address In Text Format If We Provide it Lat And Long Of Some Palce
     {
-        float km = A.distanceTo(B)/1000;
-        System.out.println("DISTANCE : "+km);
+        float km = A.distanceTo(B) / 1000;
+        System.out.println("DISTANCE : " + km);
         return km * 0.621371 <= 6;
     }
 
