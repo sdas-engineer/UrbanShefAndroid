@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Urbanshef</string>
+    <string name="app_name">slobite</string>
     <string name="facebook_app_id">908238163257963</string>
     <string name="fb_login_protocol_scheme">fb908238163257963</string>
 
@@ -8,7 +8,7 @@
     <string name="Test_Stripe_Key">pk_test_51IgETmEw2z4sNX5Zaz6WUDuxwayVddZGLeoQpOkaTqU8iLsQVyPmEmD58QX0YOGQ9KXFLtLuQ0FOEynLnkAsii0s002BTwbiLa</string>
     <string name="Live_Stripe_Key">pk_live_51IgETmEw2z4sNX5Z1LbPvSdvSbcOfKJNmi9UWGhB90Mglfhd1fj3OPTFYKkDAVF3leClW5DaG7fuLfhdnFjotipI00SOijybju</string>
 
-    <string name="API_URL">https://www.urbanshef.com/api</string>
+    <string name="API_URL">https://www.slobite.com/api</string>
     <string name="CLIENT_ID">ivtzXR4tEHkGTV6ZEtvvEwxFyemOXSX75af1DJ7j</string>
     <string name="CLIENT_SECRET">lFXDUmydCpTKegI8Qf9zye6WsRHx30GgY9mENG5uX8imxryca5LJYiRUCyMn2hEBlRxucqP2Uid19ZqxyqyJDx7RVQbLJzJQWwn3DSG1UbtOL0UlwLllQyvpFfT6VZFl</string>
 

@@ -7,5 +7,10 @@
         <item>@font/poppins</item>
         <item>@font/poppins_bold</item>
         <item>@font/poppins_medium</item>
+        <item>@font/kollektif</item>
+        <item>@font/kollektif_bold</item>
+        <item>@font/kollektif_italic</item>
+        <item>@font/kollektif_bolditalic</item>
+
     </array>
 </resources>
